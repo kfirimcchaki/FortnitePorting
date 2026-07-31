@@ -131,7 +131,7 @@ public partial class ExportContext
             return;
         }
 
-        if (tag.GetValue<FSoftObjectPath>() is { AssetPathName.IsNone: false } soft)
+        if (tag.GetValue<FSoftObjectPath?>() is { AssetPathName.IsNone: false } soft)
         {
             try
             {

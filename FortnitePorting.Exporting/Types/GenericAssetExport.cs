@@ -427,8 +427,8 @@ public class GenericAssetExport : BaseExport
         if (v.GetValue<FRotator>() is { } r) return new { Pitch = r.Pitch, Yaw = r.Yaw, Roll = r.Roll };
         var pkg = v.GetValue<FPackageIndex>();
         if (pkg is not null && !pkg.IsNull) return pkg.Name;
-        var soft = v.GetValue<FSoftObjectPath>();
-        if (soft is not null && !soft.AssetPathName.IsNone) return soft.AssetPathName.Text;
+        var soft = v.GetValue<FSoftObjectPath?>();
+        if (soft.HasValue && !soft.Value.AssetPathName.IsNone) return soft.Value.AssetPathName.Text;
         var gen = v.GenericValue;
         return gen switch
         {

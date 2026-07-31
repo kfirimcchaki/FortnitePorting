@@ -62,7 +62,7 @@ public class NiagaraExport : BaseExport
         AddEmitterFromProperty("EmitterHandles");
         AddEmitterFromProperty("Emitters");
 
-        if (asset.ExportType.Contains("NiagaraEmitter", System.StringComparison.OrdinalIgnoreCase))
+        if (asset.ExportType.Contains("NiagaraEmitter", global::System.StringComparison.OrdinalIgnoreCase))
         {
             emitters.Clear();
             emitters.Add(asset);
@@ -130,7 +130,7 @@ public class NiagaraExport : BaseExport
             return;
         }
 
-        if (tag.GetValue<FSoftObjectPath>() is { AssetPathName.IsNone: false } soft)
+        if (tag.GetValue<FSoftObjectPath?>() is { AssetPathName.IsNone: false } soft)
         {
             var mat = soft.LoadOrDefault<UMaterialInterface>();
             if (mat is not null) AddMaterialFrom(mat, ne);
