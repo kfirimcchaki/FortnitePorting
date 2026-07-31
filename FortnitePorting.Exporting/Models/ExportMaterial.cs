@@ -29,6 +29,17 @@ public record ExportMaterial : ParameterCollection
     public ETranslucencyLightingMode TranslucencyLightingMode => BaseMaterial?.TranslucencyLightingMode ?? ETranslucencyLightingMode.TLM_VolumetricDirectional;
     public EMaterialShadingModel ShadingModel => BaseMaterial?.ShadingModel ?? EMaterialShadingModel.MSM_DefaultLit;
 
+    // UE5 extended PBR flags / parameters populated for a more accurate rebuild.
+    public bool TwoSided;
+    public bool bUsedWithNiagaraSprites;
+    public bool bUsedWithNiagaraRibbons;
+    public bool bUsedWithNiagaraMeshParticles;
+    public bool bUsedWithStaticLighting;
+    public float OpacityMaskClipValue = 0.333f;
+    public int BlendMode => (int)OverrideBlendMode;
+    public int ShadingModelInt => (int)ShadingModel;
+    public int TwoSidedSign => TwoSided ? 1 : 0;
+
     [JsonIgnore] public UMaterial? BaseMaterial;
 }
 

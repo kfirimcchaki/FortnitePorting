@@ -139,17 +139,49 @@ inline FVector FJsonWrapper::Get<FVector>(const FString& Field, const FVector& D
 template<>
 inline FRotator FJsonWrapper::Get<FRotator>(const FString& Field, const FRotator& DefaultValue) const
 {
-    if (!JsonObject.IsValid()) return DefaultValue;
-    const TSharedPtr<FJsonObject>* Obj;
-    if (JsonObject->TryGetObjectField(Field, Obj))
-    {
-        return FRotator(
-            (*Obj)->GetNumberField(TEXT("Pitch")),
-            (*Obj)->GetNumberField(TEXT("Yaw")),
-            (*Obj)->GetNumberField(TEXT("Roll"))
-        );
-    }
-    return DefaultValue;
+	if (!JsonObject.IsValid()) return DefaultValue;
+	const TSharedPtr<FJsonObject>* Obj;
+	if (JsonObject->TryGetObjectField(Field, Obj))
+	{
+		return FRotator(
+			(*Obj)->GetNumberField(TEXT("Pitch")),
+			(*Obj)->GetNumberField(TEXT("Yaw")),
+			(*Obj)->GetNumberField(TEXT("Roll"))
+		);
+	}
+	return DefaultValue;
+}
+
+template<>
+inline FVector2D FJsonWrapper::Get<FVector2D>(const FString& Field, const FVector2D& DefaultValue) const
+{
+	if (!JsonObject.IsValid()) return DefaultValue;
+	const TSharedPtr<FJsonObject>* Obj;
+	if (JsonObject->TryGetObjectField(Field, Obj))
+	{
+		return FVector2D(
+			(*Obj)->GetNumberField(TEXT("X")),
+			(*Obj)->GetNumberField(TEXT("Y"))
+		);
+	}
+	return DefaultValue;
+}
+
+template<>
+inline FLinearColor FJsonWrapper::Get<FLinearColor>(const FString& Field, const FLinearColor& DefaultValue) const
+{
+	if (!JsonObject.IsValid()) return DefaultValue;
+	const TSharedPtr<FJsonObject>* Obj;
+	if (JsonObject->TryGetObjectField(Field, Obj))
+	{
+		return FLinearColor(
+			(*Obj)->GetNumberField(TEXT("R")),
+			(*Obj)->GetNumberField(TEXT("G")),
+			(*Obj)->GetNumberField(TEXT("B")),
+			(*Obj)->HasField(TEXT("A")) ? (*Obj)->GetNumberField(TEXT("A")) : 1.0f
+		);
+	}
+	return DefaultValue;
 }
 
 template<typename T>
