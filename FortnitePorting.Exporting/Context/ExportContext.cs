@@ -65,7 +65,7 @@ public partial class ExportContext
                 EMeshFormat.Gltf2 => "glb",
                 EMeshFormat.OBJ => "obj",
             },
-            UAnimSequenceBase => Meta.Settings.AnimFormat switch
+            UAnimSequenceBase or UAnimMontage => Meta.Settings.AnimFormat switch
             {
                 EAnimFormat.UEFormat => "ueanim",
                 EAnimFormat.ActorX => "psa"
@@ -76,7 +76,7 @@ public partial class ExportContext
                 EImageFormat.PNG => "png",
                 EImageFormat.TGA => "tga"
             },
-            USoundWave => Meta.Settings.SoundFormat switch
+            USoundWave or USoundCue => Meta.Settings.SoundFormat switch
             {
                 ESoundFormat.WAV => "wav",
                 ESoundFormat.MP3 => "mp3",
@@ -84,7 +84,11 @@ public partial class ExportContext
                 ESoundFormat.FLAC => "flac",
             },
             ALandscapeProxy => "uemodel",
-            UFontFace => "ttf"
+            UFontFace => "ttf",
+            // JSON sidecar descriptor types (the actual asset is recreated by the UE plugin
+            // from metadata; these files simply mark the asset as exported and provide a
+            // sentinel on disk for the importer to find).
+            _ => "json"
         };
 
         var path = GetExportPath(asset, extension, embeddedAsset, isNanite, excludeGamePath: Meta.CustomPath is not null);
@@ -210,6 +214,16 @@ public partial class ExportContext
                 }
                 break;
             }
+            case UAnimMontage animMontage:
+            {
+                // UAnimMontage is exported the same binary way as an AnimSequence.
+                var exporter = new AnimExporter(animMontage, FileExportOptions);
+                foreach (var sequence in exporter.AnimSequences)
+                {
+                    File.WriteAllBytes(path, sequence.FileData);
+                }
+                break;
+            }
             case UAnimStreamable animStreamable:
             {
                 var exporter = new AnimExporter(animStreamable, FileExportOptions);
@@ -309,6 +323,31 @@ public partial class ExportContext
 
                 var fontData = assets.First().Value;
                 File.WriteAllBytes(path, fontData);
+                break;
+            }
+
+            // UAnimMontage is an AnimSequenceBase subclass handled above; this fallback
+            // covers BlendSpaces, AnimBlueprints, and other anim-related types that have
+            // no binary exporter — emit a JSON stub the UE5 plugin can use to recreate them.
+            default:
+            {
+                // Emit a JSON sidecar for any unhandled asset type so that on the UE5
+                // plugin side we can still create a stub asset (if the type is recognised)
+                // instead of silently dropping the reference. The JSON only contains
+                // basic path/class info; rich metadata is added by the specific export
+                // classes (NiagaraExport, GenericAssetExport etc.) in their own payloads.
+                if (path.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+                {
+                    var stub = new
+                    {
+                        asset.Name,
+                        Class = asset.ExportType,
+                        Path = asset.GetPathName()
+                    };
+                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(stub, Newtonsoft.Json.Formatting.Indented);
+                    File.WriteAllText(path, json);
+                }
+
                 break;
             }
         }

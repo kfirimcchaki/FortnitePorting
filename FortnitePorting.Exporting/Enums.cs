@@ -202,6 +202,84 @@ public enum EExportType
     [NonAsset]
     MaterialInstance = ExportCategory.Generic + 9,
 
+    // ===== UE5 EXTENDED GENERIC EXPORTS =====
+
+    [Description("Niagara System"), Export(EPrimitiveExportType.NiagaraSystem)]
+    [NonAsset]
+    NiagaraSystem = ExportCategory.Generic + 10,
+
+    [Description("Niagara Emitter"), Export(EPrimitiveExportType.NiagaraEmitter)]
+    [NonAsset]
+    NiagaraEmitter = ExportCategory.Generic + 11,
+
+    [Description("Actor Class"), Export(EPrimitiveExportType.Actor)]
+    [NonAsset]
+    Actor = ExportCategory.Generic + 12,
+
+    [Description("Widget Blueprint"), Export(EPrimitiveExportType.Widget)]
+    [NonAsset]
+    WidgetBlueprint = ExportCategory.Generic + 13,
+
+    [Description("Data Table"), Export(EPrimitiveExportType.DataTable)]
+    [NonAsset]
+    DataTable = ExportCategory.Generic + 14,
+
+    [Description("Curve Table"), Export(EPrimitiveExportType.CurveTable)]
+    [NonAsset]
+    CurveTable = ExportCategory.Generic + 15,
+
+    [Description("Data Asset"), Export(EPrimitiveExportType.DataAsset)]
+    [NonAsset]
+    DataAsset = ExportCategory.Generic + 16,
+
+    [Description("Material Parameter Collection"), Export(EPrimitiveExportType.MaterialParameterCollection)]
+    [NonAsset]
+    MaterialParameterCollection = ExportCategory.Generic + 17,
+
+    [Description("Physical Material"), Export(EPrimitiveExportType.PhysicalMaterial)]
+    [NonAsset]
+    PhysicalMaterial = ExportCategory.Generic + 18,
+
+    [Description("Skeleton"), Export(EPrimitiveExportType.Skeleton)]
+    [NonAsset]
+    Skeleton = ExportCategory.Generic + 19,
+
+    [Description("Particle System"), Export(EPrimitiveExportType.ParticleSystem)]
+    [NonAsset]
+    ParticleSystem = ExportCategory.Generic + 20,
+
+    [Description("Sound Class"), Export(EPrimitiveExportType.SoundClass)]
+    [NonAsset]
+    SoundClass = ExportCategory.Generic + 21,
+
+    [Description("Blueprint Class"), Export(EPrimitiveExportType.Blueprint)]
+    [NonAsset]
+    Blueprint = ExportCategory.Generic + 22,
+
+    [Description("Anim Blueprint"), Export(EPrimitiveExportType.AnimBlueprint)]
+    [NonAsset]
+    AnimBlueprint = ExportCategory.Generic + 23,
+
+    [Description("Blend Space"), Export(EPrimitiveExportType.BlendSpace)]
+    [NonAsset]
+    BlendSpace = ExportCategory.Generic + 24,
+
+    [Description("Anim Montage"), Export(EPrimitiveExportType.AnimMontage)]
+    [NonAsset]
+    AnimMontage = ExportCategory.Generic + 25,
+
+    [Description("Level Sequence"), Export(EPrimitiveExportType.LevelSequence)]
+    [NonAsset]
+    LevelSequence = ExportCategory.Generic + 26,
+
+    [Description("Physics Asset"), Export(EPrimitiveExportType.PhysicsAsset)]
+    [NonAsset]
+    PhysicsAsset = ExportCategory.Generic + 27,
+
+    [Description("Generic Asset (meta-only)"), Export(EPrimitiveExportType.Generic)]
+    [NonAsset]
+    Generic = ExportCategory.Generic + 28,
+
     // UTILITY
 
     [Description("Tasty Rig"), Export(EPrimitiveExportType.TastyRig)]
@@ -233,7 +311,69 @@ public enum EPrimitiveExportType
     Material,
 
     [Description("Tasty Rig")]
-    TastyRig
+    TastyRig,
+
+    // ===== UE5 EXTENDED ASSET TYPES =====
+
+    [Description("Niagara System")]
+    NiagaraSystem,
+
+    [Description("Niagara Emitter")]
+    NiagaraEmitter,
+
+    [Description("Actor")]
+    Actor,
+
+    [Description("Widget Blueprint")]
+    Widget,
+
+    [Description("Data Table")]
+    DataTable,
+
+    [Description("Curve Table")]
+    CurveTable,
+
+    [Description("Data Asset")]
+    DataAsset,
+
+    [Description("Material Parameter Collection")]
+    MaterialParameterCollection,
+
+    [Description("Physical Material")]
+    PhysicalMaterial,
+
+    [Description("Skeleton")]
+    Skeleton,
+
+    [Description("Particle System (Cascade)")]
+    ParticleSystem,
+
+    [Description("Sound Class / Mix")]
+    SoundClass,
+
+    [Description("Blueprint Class")]
+    Blueprint,
+
+    [Description("Anim Blueprint")]
+    AnimBlueprint,
+
+    [Description("Blend Space")]
+    BlendSpace,
+
+    [Description("Anim Montage")]
+    AnimMontage,
+
+    [Description("Static Mesh Actor Only")]
+    StaticMeshActor,
+
+    [Description("Level Sequence")]
+    LevelSequence,
+
+    [Description("Chaos Physics Asset")]
+    PhysicsAsset,
+
+    [Description("Generic/Unknown (meta-only)")]
+    Generic
 }
 
 public enum EImageFormat

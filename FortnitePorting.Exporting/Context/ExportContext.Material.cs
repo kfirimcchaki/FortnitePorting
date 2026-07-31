@@ -48,7 +48,47 @@ public partial class ExportContext
 
         AccumulateParameters(exportMat, ref exportMaterial);
 
-        exportMaterial.OverrideBlendMode = (exportMat as UMaterialInstanceConstant)?.BasePropertyOverrides?.BlendMode ?? exportMaterial.BaseBlendMode;
+        // Pull common material flags from either the instance or its base material so
+        // the UE5 plugin can configure the material instance with better fidelity.
+        //
+        // We read all flags via GetOrDefault because the strongly-typed property-overrides
+        // struct (FMaterialInstanceBasePropertyOverrides) and some UMaterial fields vary
+        // across CUE4Parse builds and may not exist as CLR properties.
+        try
+        {
+            if (exportMat is UMaterialInstanceConstant mic)
+            {
+                // Read via reflection on the mic itself (covers BasePropertyOverrides.* fields
+                // that are serialized as properties when the struct is FStructFallback).
+                var twoSided = mic.GetOrDefault<bool?>("bOverride_TwoSided") == true
+                    ? mic.GetOrDefault<bool>("TwoSided")
+                    : mic.GetOrDefault<bool?>("BasePropertyOverrides.TwoSided") ?? mic.GetOrDefault<bool>("TwoSided");
+                exportMaterial.TwoSided = twoSided;
+
+                var clip = mic.GetOrDefault<float?>("OpacityMaskClipValue") ?? mic.GetOrDefault<float>("BasePropertyOverrides.OpacityMaskClipValue");
+                if (clip > 0) exportMaterial.OpacityMaskClipValue = clip;
+
+                var bMode = mic.GetOrDefault<EBlendMode?>("BlendMode") ?? mic.GetOrDefault<EBlendMode?>("BasePropertyOverrides.BlendMode");
+                if (bMode.HasValue) exportMaterial.OverrideBlendMode = bMode.Value;
+                else exportMaterial.OverrideBlendMode = exportMaterial.BaseBlendMode;
+            }
+            else
+            {
+                exportMaterial.OverrideBlendMode = exportMaterial.BaseBlendMode;
+            }
+
+            if (exportMaterial.BaseMaterial is { } baseMat)
+            {
+                exportMaterial.TwoSided = exportMaterial.TwoSided || baseMat.GetOrDefault<bool>("TwoSided");
+                exportMaterial.bUsedWithNiagaraSprites = baseMat.GetOrDefault<bool>("bUsedWithNiagaraSprites");
+                exportMaterial.bUsedWithNiagaraRibbons = baseMat.GetOrDefault<bool>("bUsedWithNiagaraRibbons");
+                exportMaterial.bUsedWithNiagaraMeshParticles = baseMat.GetOrDefault<bool>("bUsedWithNiagaraMeshParticles");
+                exportMaterial.bUsedWithStaticLighting = baseMat.GetOrDefault<bool>("bUsedWithStaticLighting");
+                var baseClip = baseMat.GetOrDefault<float>("OpacityMaskClipValue");
+                if (baseClip > 0) exportMaterial.OpacityMaskClipValue = baseClip;
+            }
+        }
+        catch { /* ignored — properties may not exist in all CUE4Parse builds */ }
 
         MaterialCache.Add(exportMaterial);
         return exportMaterial;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CoreMinimal.h"
+
 namespace ExportCategory
 {
 	constexpr uint32 Cosmetic = 1 << 8;
@@ -20,7 +22,30 @@ enum class EPrimitiveExportType : uint8
 	Sound,
 	Font,
 	PoseAsset,
-	Material
+	Material,
+	TastyRig,
+
+	// ===== UE5 EXTENDED ASSET TYPES =====
+	NiagaraSystem,
+	NiagaraEmitter,
+	Actor,
+	Widget,
+	DataTable,
+	CurveTable,
+	DataAsset,
+	MaterialParameterCollection,
+	PhysicalMaterial,
+	Skeleton,
+	ParticleSystem,
+	SoundClass,
+	Blueprint,
+	AnimBlueprint,
+	BlendSpace,
+	AnimMontage,
+	StaticMeshActor,
+	LevelSequence,
+	PhysicsAsset,
+	Generic
 };
 
 UENUM()
@@ -83,4 +108,25 @@ enum class EExportType : uint32
 	PoseAsset = ExportCategory::Generic + 7,
 	Material = ExportCategory::Generic + 8,
 	MaterialInstance = ExportCategory::Generic + 9,
+
+	// ===== UE5 EXTENDED GENERIC EXPORTS =====
+	NiagaraSystem = ExportCategory::Generic + 10,
+	NiagaraEmitter = ExportCategory::Generic + 11,
+	Actor = ExportCategory::Generic + 12,
+	WidgetBlueprint = ExportCategory::Generic + 13,
+	DataTable = ExportCategory::Generic + 14,
+	CurveTable = ExportCategory::Generic + 15,
+	DataAsset = ExportCategory::Generic + 16,
+	MaterialParameterCollection = ExportCategory::Generic + 17,
+	PhysicalMaterial = ExportCategory::Generic + 18,
+	Skeleton = ExportCategory::Generic + 19,
+	ParticleSystem = ExportCategory::Generic + 20,
+	SoundClass = ExportCategory::Generic + 21,
+	Blueprint = ExportCategory::Generic + 22,
+	AnimBlueprint = ExportCategory::Generic + 23,
+	BlendSpace = ExportCategory::Generic + 24,
+	AnimMontage = ExportCategory::Generic + 25,
+	LevelSequence = ExportCategory::Generic + 26,
+	PhysicsAsset = ExportCategory::Generic + 27,
+	Generic = ExportCategory::Generic + 28,
 };
